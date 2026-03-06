@@ -1,4 +1,4 @@
-from rules.ambiguity_rules import VagueTermRule
+from rules.ambiguity_rules import AmbiguityRule
 from rules.structure_rules import ShallRule
 from models.schemas import AnalysisResult
 
@@ -6,7 +6,7 @@ class AnalysisEngine:
 
     def __init__(self):
         self.rules = [
-            VagueTermRule(),
+            AmbiguityRule(),
             ShallRule(),
         ]
 
