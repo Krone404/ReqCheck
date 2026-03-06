@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from api.requirements import router
 
 app = FastAPI()
 
-@app.get("/")
-def root():
-    return {"message": "ReqCheck API running"}
+app.include_router(router, prefix="/api")
