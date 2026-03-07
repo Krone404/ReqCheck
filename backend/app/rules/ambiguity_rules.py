@@ -24,14 +24,14 @@ COMPARATIVE_TERMS = [
 
 class AmbiguityRule(BaseRule):
 
-    def apply(self, text: str):
+    def apply(self, req: PreprocessedRequirement):
         findings = []
-        lowered = text.lower()
+        text = req.normalized
 
-        findings.extend(self._check_vague_terms(lowered))
-        findings.extend(self._check_weak_modals(lowered))
-        findings.extend(self._check_open_quantifiers(lowered))
-        findings.extend(self._check_comparatives(lowered))
+        findings.extend(self._check_vague_terms(text))
+        findings.extend(self._check_weak_modals(text))
+        findings.extend(self._check_open_quantifiers(text))
+        findings.extend(self._check_comparatives(text))
 
         return findings
 

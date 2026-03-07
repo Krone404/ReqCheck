@@ -1,6 +1,7 @@
 from rules.ambiguity_rules import AmbiguityRule
 from rules.structure_rules import ShallRule
 from models.schemas import AnalysisResult
+from preprocessing.preprocessor import PreprocessedRequirement
 
 class AnalysisEngine:
 
@@ -13,11 +14,13 @@ class AnalysisEngine:
     def analyse(self, text: str) -> AnalysisResult:
         findings = []
 
+        req = PreprocessedRequirement(text)
+
         for rule in self.rules:
-            findings.extend(rule.apply(text))
+            findings.extend(rule.apply(req))
 
         clarity_score = self.calculate_clarity(findings)
-        testability_score = self.calculate_testability(text, findings)
+        testability_score = self.calculate_testability(req, findings)
 
         return AnalysisResult(
             findings=findings,
@@ -29,8 +32,8 @@ class AnalysisEngine:
         penalty = sum(1 for f in findings if f.severity in ["medium", "high"])
         return max(0, 100 - penalty * 10)
 
-    def calculate_testability(self, text, findings):
+    def calculate_testability(self, req, findings):
         score = 100
-        if "shall" not in text.lower():
+        if "shall" not in req.lower():
             score -= 15
         return max(0, score)
