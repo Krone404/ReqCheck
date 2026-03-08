@@ -1,11 +1,13 @@
-from app.models.schemas import Finding
+import re
 from app.rules.base_rule import BaseRule
+from app.models.schemas import Finding
 from app.preprocessing.preprocessor import PreprocessedRequirement
+
 class ShallRule(BaseRule):
 
     def apply(self, req: PreprocessedRequirement):
 
-        if not re.search(r"\bshall\b", req.normalized()):
+        if not re.search(r"\bshall\b", req.normalized):
             return [
                 Finding(
                     rule_id="STR001",
