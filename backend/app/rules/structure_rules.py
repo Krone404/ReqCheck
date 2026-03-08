@@ -5,7 +5,7 @@ class ShallRule(BaseRule):
 
     def apply(self, req: PreprocessedRequirement):
 
-        if "shall" not in req.normalized:
+        if not re.search(r"\bshall\b", req.normalized()):
             return [
                 Finding(
                     rule_id="STR001",
