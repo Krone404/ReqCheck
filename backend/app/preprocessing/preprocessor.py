@@ -1,6 +1,5 @@
 import re
 
-
 class PreprocessedRequirement:
 
     def __init__(self, text: str):

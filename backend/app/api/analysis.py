@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from models.schemas import RequirementInput
 from services.analysis_engine import AnalysisEngine
+from preprocessing.preprocessor import PreprocessedRequirement
 
 router = APIRouter()
 engine = AnalysisEngine()

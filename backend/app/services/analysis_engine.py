@@ -12,9 +12,10 @@ class AnalysisEngine:
         ]
 
     def analyse(self, text: str) -> AnalysisResult:
-        findings = []
 
         req = PreprocessedRequirement(text)
+
+        findings = []
 
         for rule in self.rules:
             findings.extend(rule.apply(req))
@@ -33,7 +34,10 @@ class AnalysisEngine:
         return max(0, 100 - penalty * 10)
 
     def calculate_testability(self, req, findings):
+
         score = 100
-        if "shall" not in req.lower():
+
+        if "shall" not in req.normalized:
             score -= 15
+
         return max(0, score)
