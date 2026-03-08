@@ -2,7 +2,7 @@ from rules.ambiguity_rules import AmbiguityRule
 from rules.structure_rules import ShallRule
 from models.schemas import AnalysisResult
 from preprocessing.preprocessor import PreprocessedRequirement
-
+from app.rules.testability_rules import MeasurableCriteriaRule
 
 class AnalysisEngine:
 
@@ -10,6 +10,8 @@ class AnalysisEngine:
         self.rules = [
             AmbiguityRule(),
             ShallRule(),
+            ActorActionRule(),
+            MeasurableCriteriaRule()
         ]
 
     def analyse(self, text: str) -> AnalysisResult:
