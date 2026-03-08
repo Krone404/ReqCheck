@@ -1,4 +1,5 @@
 from app.services.analysis_engine import AnalysisEngine
+from app.preprocessing.preprocessor import PreprocessedRequirement
 
 
 def test_detects_missing_shall():
@@ -72,3 +73,27 @@ def test_multiple_issues_detected():
     assert "AMB002" in rule_ids   # weak modal
     assert "STR001" in rule_ids   # missing shall
     assert "TEST001" in rule_ids  # no measurable criteria
+
+def test_preprocessor_normalizes_text():
+
+    req = PreprocessedRequirement("The System SHALL Process Requests")
+
+    assert req.normalized == "the system shall process requests"
+
+def test_clarity_score_reduces_with_findings():
+
+    engine = AnalysisEngine()
+
+    text = "The system may respond quickly."
+
+    result = engine.analyse(text)
+
+    assert result.clarity_score < 100
+
+def test_empty_requirement():
+
+    engine = AnalysisEngine()
+
+    result = engine.analyse("")
+
+    assert result.clarity_score <= 100
