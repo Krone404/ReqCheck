@@ -253,7 +253,7 @@ pip install -r requirements.txt
 Start backend server.
 
 ```
-uvicorn app:app --reload
+uvicorn app.main:app --reload
 ```
 
 Backend runs at:
@@ -297,16 +297,16 @@ http://localhost:5173
 Endpoint:
 
 ```
-POST /analyze
+POST /api/analyse
 ```
 
 Example request:
 
 ```json
 {
-  "text": "The system should respond quickly to user input",
-  "requirement_type": "functional",
-  "moscow": "must"
+  "text": "The system shall respond within 2 seconds.",
+  "type": "functional",
+  "priority": "must"
 }
 ```
 
@@ -314,13 +314,9 @@ Example response:
 
 ```json
 {
-  "clarity_score": 72,
-  "findings": [
-    {
-      "message": "Ambiguous term detected: quickly",
-      "severity": "medium"
-    }
-  ]
+  "findings": [],
+  "clarity_score": 100,
+  "testability_score": 100
 }
 ```
 
