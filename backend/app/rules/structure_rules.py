@@ -1,10 +1,12 @@
 from models.schemas import Finding
 from rules.base_rule import BaseRule
+from preprocessing.preprocessor import PreprocessedRequirement
 
 class ShallRule(BaseRule):
 
-    def apply(self, text: str):
-        if "shall" not in text.lower():
+    def apply(self, req: PreprocessedRequirement):
+
+        if "shall" not in req.normalized:
             return [
                 Finding(
                     rule_id="STR001",
@@ -12,4 +14,5 @@ class ShallRule(BaseRule):
                     severity="low"
                 )
             ]
+
         return []

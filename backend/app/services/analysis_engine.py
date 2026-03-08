@@ -3,6 +3,7 @@ from rules.structure_rules import ShallRule
 from models.schemas import AnalysisResult
 from preprocessing.preprocessor import PreprocessedRequirement
 
+
 class AnalysisEngine:
 
     def __init__(self):
