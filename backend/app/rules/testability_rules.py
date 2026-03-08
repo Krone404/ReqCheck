@@ -1,7 +1,7 @@
 import re
 
-from app.rules.base_rule import BaseRule
 from app.models.schemas import Finding
+from app.rules.base_rule import BaseRule
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
 MEASURABLE_PATTERN = r"\b\d+\s?(seconds?|ms|milliseconds?|minutes?|hours?|users?|requests?|mb|gb|%)\b"

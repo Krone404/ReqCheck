@@ -1,7 +1,7 @@
 import re
-from models.schemas import Finding
-from rules.base_rule import BaseRule
-
+from app.models.schemas import Finding
+from app.rules.base_rule import BaseRule
+from app.preprocessing.preprocessor import PreprocessedRequirement
 
 VAGUE_TERMS = [
     "fast", "efficient", "robust", "user-friendly",

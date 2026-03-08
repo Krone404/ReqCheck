@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from models.schemas import Finding
-from preprocessing.preprocessor import PreprocessedRequirement
+from app.models.schemas import Finding
+from app.preprocessing.preprocessor import PreprocessedRequirement
 class BaseRule(ABC):
 
     @abstractmethod

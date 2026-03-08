@@ -1,8 +1,8 @@
-from rules.ambiguity_rules import AmbiguityRule
-from rules.structure_rules import ShallRule
-from models.schemas import AnalysisResult
-from preprocessing.preprocessor import PreprocessedRequirement
+from app.rules.ambiguity_rules import AmbiguityRule
+from app.rules.structure_rules import ShallRule
 from app.rules.testability_rules import MeasurableCriteriaRule
+from app.models.schemas import AnalysisResult
+from app.preprocessing.preprocessor import PreprocessedRequirement
 
 class AnalysisEngine:
 
@@ -10,7 +10,6 @@ class AnalysisEngine:
         self.rules = [
             AmbiguityRule(),
             ShallRule(),
-            ActorActionRule(),
             MeasurableCriteriaRule()
         ]
 
@@ -33,8 +32,18 @@ class AnalysisEngine:
         )
 
     def calculate_clarity(self, findings):
-        penalty = sum(1 for f in findings if f.severity in ["medium", "high"])
-        return max(0, 100 - penalty * 10)
+
+        score = 100
+
+        for finding in findings:
+            if finding.severity == "high":
+                score -= 20
+            elif finding.severity == "medium":
+                score -= 10
+            elif finding.severity == "low":
+                score -= 5
+
+        return max(0, score)
 
     def calculate_testability(self, req, findings):
 

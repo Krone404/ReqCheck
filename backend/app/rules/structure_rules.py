@@ -1,7 +1,6 @@
-from models.schemas import Finding
-from rules.base_rule import BaseRule
-from preprocessing.preprocessor import PreprocessedRequirement
-
+from app.models.schemas import Finding
+from app.rules.base_rule import BaseRule
+from app.preprocessing.preprocessor import PreprocessedRequirement
 class ShallRule(BaseRule):
 
     def apply(self, req: PreprocessedRequirement):
