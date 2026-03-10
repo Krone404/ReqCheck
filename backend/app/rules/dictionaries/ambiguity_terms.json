@@ -1,0 +1,31 @@
+{
+  "vague_terms": [
+    "fast",
+    "efficient",
+    "robust",
+    "user-friendly",
+    "quick",
+    "simple",
+    "intuitive",
+    "flexible",
+    "reliable",
+    "scalable"
+  ],
+  "weak_modals": ["may", "might", "can", "could"],
+  "open_quantifiers": [
+    "etc",
+    "and so on",
+    "some",
+    "many",
+    "various",
+    "several"
+  ],
+  "comparatives": [
+    "better",
+    "improved",
+    "faster",
+    "slower",
+    "more efficient",
+    "less efficient"
+  ]
+}
