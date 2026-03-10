@@ -1,26 +1,22 @@
 import re
+import json
+from pathlib import Path
+
 from app.models.schemas import Finding
 from app.rules.base_rule import BaseRule
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
-VAGUE_TERMS = [
-    "fast", "efficient", "robust", "user-friendly",
-    "quick", "simple", "intuitive", "flexible"
-]
 
-WEAK_MODALS = [
-    "may", "might", "can", "could"
-]
+# Load dictionary once at startup
+DICT_PATH = Path(__file__).parent / "dictionaries" / "ambiguity_terms.json"
 
-OPEN_QUANTIFIERS = [
-    "etc", "and so on", "some", "many", "various"
-]
+with open(DICT_PATH) as f:
+    TERMS = json.load(f)
 
-COMPARATIVE_TERMS = [
-    "better", "improved", "faster", "slower",
-    "more efficient", "less efficient"
-]
-
+VAGUE_TERMS = TERMS["vague_terms"]
+WEAK_MODALS = TERMS["weak_modals"]
+OPEN_QUANTIFIERS = TERMS["open_quantifiers"]
+COMPARATIVE_TERMS = TERMS["comparatives"]
 
 class AmbiguityRule(BaseRule):
 
@@ -81,7 +77,7 @@ class AmbiguityRule(BaseRule):
     def _check_comparatives(self, text):
         findings = []
         for term in COMPARATIVE_TERMS:
-            if term in text:
+            if re.search(rf"\b{re.escape(term)}\b", text):
                 findings.append(
                     Finding(
                         rule_id="AMB004",
