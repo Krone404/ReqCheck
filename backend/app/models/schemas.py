@@ -15,3 +15,4 @@ class AnalysisResult(BaseModel):
     findings: List[Finding]
     clarity_score: float
     testability_score: float
+    

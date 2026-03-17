@@ -3,6 +3,7 @@ from app.rules.structure_rules import ShallRule
 from app.rules.testability_rules import MeasurableCriteriaRule
 from app.models.schemas import AnalysisResult
 from app.preprocessing.preprocessor import PreprocessedRequirement
+from app.rag.pipeline import rag_pipeline
 
 class AnalysisEngine:
 
@@ -25,10 +26,18 @@ class AnalysisEngine:
         clarity_score = self.calculate_clarity(findings)
         testability_score = self.calculate_testability(req, findings)
 
+        suggestions = []
+        if findings:
+            try:
+                suggestions = rag_pipeline(text, findings)
+            except Exception:
+                suggestions = []
+
         return AnalysisResult(
             findings=findings,
             clarity_score=clarity_score,
-            testability_score=testability_score
+            testability_score=testability_score,
+            suggestions=suggestions
         )
 
     def calculate_clarity(self, findings):
