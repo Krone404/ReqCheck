@@ -28,10 +28,7 @@ class AnalysisEngine:
 
         suggestions = []
         if findings:
-            try:
-                suggestions = rag_pipeline(text, findings)
-            except Exception:
-                suggestions = []
+            suggestions = rag_pipeline(text, findings)
 
         return AnalysisResult(
             findings=findings,

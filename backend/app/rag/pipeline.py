@@ -1,13 +1,14 @@
 from app.rag.generator import generate
-
+from app.rag.query import retrieve_context
 
 def rag_pipeline(text: str, findings: list):
 
-    # Extract issues from your rule engine
     issues = "\n".join([f.message for f in findings])
 
+    context = retrieve_context(findings)
+
     prompt = f"""
-    You are improving a software requirement.
+    You are a software requirements expert.
 
     Requirement:
     {text}
@@ -15,15 +16,17 @@ def rag_pipeline(text: str, findings: list):
     Issues detected:
     {issues}
 
-    Rewrite the requirement so that:
-    - vague terms are removed
-    - measurable criteria is included
-    - use "shall"
-    - make it testable
+    Relevant guidelines:
+    {context}
 
-    Return ONLY the improved requirement.
+    Rules:
+    - Use the format: "The system shall ..."
+    - Do NOT invent assumptions
+    - Keep it simple and measurable
+
+    Return ONLY one improved requirement.
     """
 
     output = generate(prompt)
 
-    return [output]  # keep as list for schema
+    return [output]
