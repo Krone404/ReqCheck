@@ -21,8 +21,10 @@ def rag_pipeline(text: str, findings: list):
 
     Rules:
     - Use the format: "The system shall ..."
-    - Do NOT invent assumptions
-    - Keep it simple and measurable
+    - Replace vague terms with measurable criteria
+    - If no exact value is given, use a reasonable default (e.g. 2 seconds)
+    - Keep the requirement simple, precise, and testable
+    - Do NOT defer details to other documents
 
     Return ONLY one improved requirement.
     """
