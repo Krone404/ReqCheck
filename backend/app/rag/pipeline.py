@@ -5,7 +5,7 @@ def rag_pipeline(text: str, findings: list):
 
     issues = "\n".join([f.message for f in findings])
 
-    context = retrieve_context(findings)
+    context = retrieve_context(findings, analysis_type="single_requirement")
 
     prompt = f"""
     You are a software requirements expert.
@@ -16,8 +16,10 @@ def rag_pipeline(text: str, findings: list):
     Issues detected:
     {issues}
 
-    Relevant guidelines:
+    Relevant ISO guidelines:
     {context}
+
+    Rewrite the requirement by applying the guidance above.
 
     Rules:
     - Use the format: "The system shall ..."

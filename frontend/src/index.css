@@ -30,3 +30,13 @@ button {
 .scores {
   margin-top: 20px;
 }
+
+.loading-text {
+  margin-top: 10px;
+  color: #555;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

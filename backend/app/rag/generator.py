@@ -7,12 +7,14 @@ def generate(prompt: str) -> str:
             ["ollama", "run", "mistral"],
             input=prompt,
             text=True,
+            encoding="utf-8",
+            errors="replace",
             capture_output=True,
             timeout=30
         )
 
         if result.returncode != 0:
-            return "Error: LLM generation failed."
+            return f"Error: LLM generation failed. {result.stderr.strip()}"
 
         return result.stdout.strip()
 

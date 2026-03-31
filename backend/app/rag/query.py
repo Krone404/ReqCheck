@@ -1,34 +1,57 @@
+import json
+from pathlib import Path
 from typing import List
 
-GUIDELINES = [
-    "Avoid vague terms like fast, efficient, user-friendly.",
-    "Requirements must be measurable and testable.",
-    "Use 'shall' instead of 'should', 'may', or 'could'.",
-    "Avoid open-ended terms like etc or and so on.",
-    "Comparative terms require a measurable baseline."
-]
+DATA_FILE = Path(__file__).parent / "data" / "guidlines.json"
 
 
-def retrieve_context(findings: List) -> str:
-    """
-    Return relevant guidelines based on detected issues
-    """
+def load_knowledge_base() -> dict:
+    with open(DATA_FILE, "r", encoding="utf-8") as file:
+        return json.load(file)
 
-    context = []
 
-    for f in findings:
-        if f.rule_id == "AMB001":
-            context.append(GUIDELINES[0])
-        elif f.rule_id == "AMB002":
-            context.append(GUIDELINES[2])
-        elif f.rule_id == "AMB003":
-            context.append(GUIDELINES[3])
-        elif f.rule_id == "AMB004":
-            context.append(GUIDELINES[4])
-        elif f.rule_id == "TEST001":
-            context.append(GUIDELINES[1])
-        elif f.rule_id == "STR001":
-            context.append(GUIDELINES[2])
+def retrieve_context(findings: List, analysis_type: str = "single_requirement") -> str:
+    kb = load_knowledge_base()
 
-    # remove duplicates
-    return "\n".join(list(set(context)))
+    rules = kb.get("rules", [])
+    usage = kb.get("usage", {})
+
+    allowed_categories = set(usage.get(analysis_type, []))
+    finding_ids = {f.rule_id for f in findings}
+
+    matched = []
+    seen = set()
+
+    for rule in rules:
+        category = rule.get("category")
+        mapped = set(rule.get("mapped_rules", []))
+
+        # Skip if wrong category
+        if category not in allowed_categories:
+            continue
+
+        # Skip if no match
+        if not finding_ids.intersection(mapped):
+            continue
+
+        # Avoid duplicates
+        if rule["id"] in seen:
+            continue
+
+        entry = [
+            f"[{rule['id']} | Section {rule['section']}]",
+            f"{rule['rule']}",
+            f"Guidance: {rule['guidance']}",
+            f"Tip: {rule['rewrite_tip']}"
+        ]
+
+        # Add ONE example (keeps prompt clean)
+        if rule.get("bad_examples"):
+            entry.append(f"Bad: {rule['bad_examples'][0]}")
+        if rule.get("good_examples"):
+            entry.append(f"Good: {rule['good_examples'][0]}")
+
+        matched.append("\n".join(entry))
+        seen.add(rule["id"])
+
+    return "\n\n".join(matched)

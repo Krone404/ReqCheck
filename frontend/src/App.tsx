@@ -5,15 +5,22 @@ import ScoreDisplay from "./components/ScoreDisplay";
 import { analyseRequirement } from "./api/reqcheck";
 import type { AnalysisResult } from "./types/analysis";
 
+
 function App() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleAnalyse(text: string) {
+    setIsLoading(true);
+    setResult(null);
+
     try {
       const data = await analyseRequirement(text);
       setResult(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -21,7 +28,7 @@ function App() {
     <div className="app">
       <h1>ReqCheck</h1>
 
-      <RequirementInput onAnalyse={handleAnalyse} />
+      <RequirementInput onAnalyse={handleAnalyse} isLoading={isLoading} />
 
       {result && (
         <>
