@@ -1,6 +1,7 @@
 from app.rules.ambiguity_rules import AmbiguityRule
 from app.rules.structure_rules import ShallRule
 from app.rules.testability_rules import MeasurableCriteriaRule
+from app.rules.singularity_rules import SingularityRule
 from app.models.schemas import AnalysisResult
 from app.preprocessing.preprocessor import PreprocessedRequirement
 from app.rag.pipeline import rag_pipeline
@@ -11,7 +12,8 @@ class AnalysisEngine:
         self.rules = [
             AmbiguityRule(),
             ShallRule(),
-            MeasurableCriteriaRule()
+            MeasurableCriteriaRule(),
+            SingularityRule()
         ]
 
     def analyse(self, text: str) -> AnalysisResult:
@@ -55,7 +57,14 @@ class AnalysisEngine:
 
         score = 100
 
+        # Missing "shall"
         if "shall" not in req.normalized:
             score -= 15
+
+        for finding in findings:
+            if finding.rule_id == "TEST001":
+                score -= 15
+            elif finding.rule_id == "SING001":
+                score -= 10
 
         return max(0, score)
