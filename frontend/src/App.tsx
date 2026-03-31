@@ -9,16 +9,20 @@ import type { AnalysisResult } from "./types/analysis";
 function App() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleAnalyse(text: string, useRag: boolean) {
     setIsLoading(true);
     setResult(null);
+    setError(null);
 
     try {
       const data = await analyseRequirement(text, useRag);
       setResult(data);
     } catch (err) {
-      console.error(err);
+      const message =
+        err instanceof Error ? err.message : "Something went wrong.";
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -29,6 +33,8 @@ function App() {
       <h1>ReqCheck</h1>
 
       <RequirementInput onAnalyse={handleAnalyse} isLoading={isLoading} />
+
+      {error && <p className="error-message">{error}</p>}
 
       {result && (
         <>

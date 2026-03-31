@@ -40,3 +40,12 @@ button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.error-message {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #d93025;
+  border-radius: 6px;
+  background: #fce8e6;
+  color: #a50e0e;
+}

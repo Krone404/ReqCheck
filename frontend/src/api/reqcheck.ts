@@ -12,9 +12,22 @@ export async function analyseRequirement(text: string, useRag: boolean) {
     }),
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to analyse requirement");
+  let data: any = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
   }
 
-  return response.json();
+  if (!response.ok) {
+    const message =
+      data?.detail ||
+      data?.message ||
+      `Request failed with status ${response.status}`;
+
+    throw new Error(message);
+  }
+
+  return data;
 }
