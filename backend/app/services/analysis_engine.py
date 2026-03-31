@@ -6,8 +6,8 @@ from app.models.schemas import AnalysisResult
 from app.preprocessing.preprocessor import PreprocessedRequirement
 from app.rag.pipeline import rag_pipeline
 
-class AnalysisEngine:
 
+class AnalysisEngine:
     def __init__(self):
         self.rules = [
             AmbiguityRule(),
@@ -16,8 +16,7 @@ class AnalysisEngine:
             SingularityRule()
         ]
 
-    def analyse(self, text: str) -> AnalysisResult:
-
+    def analyse(self, text: str, use_rag: bool = False) -> AnalysisResult:
         req = PreprocessedRequirement(text)
 
         findings = []
@@ -29,7 +28,7 @@ class AnalysisEngine:
         testability_score = self.calculate_testability(req, findings)
 
         suggestions = []
-        if findings:
+        if use_rag and findings:
             suggestions = rag_pipeline(text, findings)
 
         return AnalysisResult(
@@ -40,7 +39,6 @@ class AnalysisEngine:
         )
 
     def calculate_clarity(self, findings):
-
         score = 100
 
         for finding in findings:
@@ -54,10 +52,8 @@ class AnalysisEngine:
         return max(0, score)
 
     def calculate_testability(self, req, findings):
-
         score = 100
 
-        # Missing "shall"
         if "shall" not in req.normalized:
             score -= 15
 

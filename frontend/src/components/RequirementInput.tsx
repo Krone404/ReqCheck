@@ -1,12 +1,13 @@
 import { useState } from "react";
 
 interface Props {
-  onAnalyse: (text: string) => void;
+  onAnalyse: (text: string, useRag: boolean) => void;
   isLoading: boolean;
 }
 
 export default function RequirementInput({ onAnalyse, isLoading }: Props) {
   const [text, setText] = useState("");
+  const [useRag, setUseRag] = useState(false);
 
   return (
     <div className="input-container">
@@ -17,8 +18,18 @@ export default function RequirementInput({ onAnalyse, isLoading }: Props) {
         rows={5}
       />
 
+      <label>
+        <input
+          type="checkbox"
+          checked={useRag}
+          onChange={(e) => setUseRag(e.target.checked)}
+          disabled={isLoading}
+        />
+        Enable AI suggestions
+      </label>
+
       <button
-        onClick={() => onAnalyse(text)}
+        onClick={() => onAnalyse(text, useRag)}
         disabled={isLoading || !text.trim()}
       >
         {isLoading ? "Analysing..." : "Analyse Requirement"}

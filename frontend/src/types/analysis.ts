@@ -8,4 +8,5 @@ export interface AnalysisResult {
   findings: Finding[];
   clarity_score: number;
   testability_score: number;
+  suggestions: string[];
 }

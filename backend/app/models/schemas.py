@@ -5,6 +5,7 @@ class RequirementInput(BaseModel):
     text: str
     type: Literal["functional", "non_functional", "constraint"]
     priority: Literal["must", "should", "could", "wont"]
+    use_rag: bool = False
 
 class Finding(BaseModel):
     rule_id: str

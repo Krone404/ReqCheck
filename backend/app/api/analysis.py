@@ -8,11 +8,13 @@ engine = AnalysisEngine()
 
 @router.post("/analyse")
 def analyse_requirement(req: RequirementInput):
-
     if not req.text.strip():
         raise HTTPException(
             status_code=400,
             detail="Requirement text cannot be empty"
         )
 
-    return engine.analyse(req.text)
+    return engine.analyse(
+        text=req.text,
+        use_rag=req.use_rag
+    )
