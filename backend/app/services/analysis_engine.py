@@ -16,7 +16,7 @@ class AnalysisEngine:
             SingularityRule()
         ]
 
-    def analyse(self, text: str, use_rag: bool = False) -> AnalysisResult:
+    async def analyse(self, text: str, use_rag: bool = False) -> AnalysisResult:
         req = PreprocessedRequirement(text)
 
         findings = []
@@ -30,7 +30,7 @@ class AnalysisEngine:
         suggestions = []
         rag_error = None
         if use_rag and findings:
-            suggestions, rag_error = rag_pipeline(text, findings)
+            suggestions, rag_error = await rag_pipeline(text, findings)
 
         return AnalysisResult(
             findings=findings,

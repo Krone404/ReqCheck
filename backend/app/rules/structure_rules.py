@@ -6,8 +6,13 @@ from app.models.schemas import Finding
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
 _DICT_PATH = Path(__file__).parent / "dictionaries" / "ambiguity_terms.json"
-with open(_DICT_PATH) as _f:
-    _WEAK_MODALS = json.load(_f)["weak_modals"]
+try:
+    with open(_DICT_PATH) as _f:
+        _WEAK_MODALS = json.load(_f)["weak_modals"]
+except FileNotFoundError:
+    raise RuntimeError(f"Ambiguity terms dictionary not found at {_DICT_PATH}")
+except json.JSONDecodeError as e:
+    raise RuntimeError(f"Ambiguity terms dictionary is malformed: {e}")
 
 
 class ShallRule(BaseRule):

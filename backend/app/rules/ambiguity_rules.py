@@ -10,8 +10,13 @@ from app.preprocessing.preprocessor import PreprocessedRequirement
 # Load dictionary once at startup
 DICT_PATH = Path(__file__).parent / "dictionaries" / "ambiguity_terms.json"
 
-with open(DICT_PATH) as f:
-    TERMS = json.load(f)
+try:
+    with open(DICT_PATH) as f:
+        TERMS = json.load(f)
+except FileNotFoundError:
+    raise RuntimeError(f"Ambiguity terms dictionary not found at {DICT_PATH}")
+except json.JSONDecodeError as e:
+    raise RuntimeError(f"Ambiguity terms dictionary is malformed: {e}")
 
 VAGUE_TERMS = TERMS["vague_terms"]
 WEAK_MODALS = TERMS["weak_modals"]

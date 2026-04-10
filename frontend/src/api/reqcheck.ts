@@ -1,6 +1,11 @@
 const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
-export async function analyseRequirement(text: string, useRag: boolean) {
+import type { AnalysisResult } from "../types/analysis";
+
+export async function analyseRequirement(
+  text: string,
+  useRag: boolean
+): Promise<AnalysisResult> {
   const response = await fetch(`${BASE}/api/analyse`, {
     method: "POST",
     headers: {
@@ -8,13 +13,11 @@ export async function analyseRequirement(text: string, useRag: boolean) {
     },
     body: JSON.stringify({
       text,
-      type: "functional",
-      priority: "must",
       use_rag: useRag,
     }),
   });
 
-  let data: any = null;
+  let data: AnalysisResult | null = null;
 
   try {
     data = await response.json();
@@ -23,13 +26,13 @@ export async function analyseRequirement(text: string, useRag: boolean) {
   }
 
   if (!response.ok) {
+    const errData = data as unknown as { detail?: string; message?: string } | null;
     const message =
-      data?.detail ||
-      data?.message ||
+      errData?.detail ||
+      errData?.message ||
       `Request failed with status ${response.status}`;
-
     throw new Error(message);
   }
 
-  return data;
+  return data as AnalysisResult;
 }

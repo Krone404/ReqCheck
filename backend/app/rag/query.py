@@ -11,8 +11,13 @@ def load_knowledge_base() -> dict:
     global _KB
     if _KB is not None:
         return _KB
-    with open(DATA_FILE, "r", encoding="utf-8") as file:
-        _KB = json.load(file)
+    try:
+        with open(DATA_FILE, "r", encoding="utf-8") as file:
+            _KB = json.load(file)
+    except FileNotFoundError:
+        raise RuntimeError(f"RAG knowledge base not found at {DATA_FILE}")
+    except json.JSONDecodeError as e:
+        raise RuntimeError(f"RAG knowledge base is malformed: {e}")
     return _KB
 
 
@@ -59,5 +64,8 @@ def retrieve_context(findings: List, analysis_type: str = "single_requirement") 
 
         matched.append("\n".join(entry))
         seen.add(rule["id"])
+
+    if not matched:
+        return "No specific ISO guidelines matched the detected issues."
 
     return "\n\n".join(matched)

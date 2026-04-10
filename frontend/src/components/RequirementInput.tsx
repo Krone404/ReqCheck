@@ -35,7 +35,6 @@ export default function RequirementInput({ onAnalyse, isLoading }: Props) {
         {isLoading ? "Analysing..." : "Analyse Requirement"}
       </button>
 
-      {isLoading && <p className="loading-text">Running analysis...</p>}
     </div>
   );
 }
