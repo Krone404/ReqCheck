@@ -1,6 +1,6 @@
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
-
 import type { AnalysisResult } from "../types/analysis";
+
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export async function analyseRequirement(
   text: string,
@@ -34,5 +34,7 @@ export async function analyseRequirement(
     throw new Error(message);
   }
 
-  return data as AnalysisResult;
+  if (!data) throw new Error("Empty response from server");
+
+  return data;
 }
