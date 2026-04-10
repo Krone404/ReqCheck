@@ -71,7 +71,8 @@ def test_multiple_issues_detected():
     rule_ids = [f.rule_id for f in result.findings]
 
     assert "AMB002" in rule_ids   # weak modal
-    assert "STR001" in rule_ids   # missing shall
+    # STR001 is suppressed when AMB002 fires (same root cause, avoid double penalty)
+    assert "STR001" not in rule_ids
     assert "TEST001" in rule_ids  # no measurable criteria
 
 def test_preprocessor_normalizes_text():
@@ -90,10 +91,13 @@ def test_clarity_score_reduces_with_findings():
 
     assert result.clarity_score < 100
 
-def test_empty_requirement():
-
+def test_empty_requirement_scores_low():
+    """An empty string should fire all structural rules, producing a low clarity score."""
     engine = AnalysisEngine()
 
     result = engine.analyse("")
 
-    assert result.clarity_score <= 100
+    # STR001 and TEST001 should fire at minimum
+    rule_ids = [f.rule_id for f in result.findings]
+    assert "STR001" in rule_ids
+    assert result.clarity_score < 100

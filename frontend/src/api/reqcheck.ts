@@ -1,5 +1,7 @@
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+
 export async function analyseRequirement(text: string, useRag: boolean) {
-  const response = await fetch("http://localhost:8000/api/analyse", {
+  const response = await fetch(`${BASE}/api/analyse`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -5,12 +5,11 @@ from app.rules.base_rule import BaseRule
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
 
-MULTI_BEHAVIOUR_PATTERN = (
-    r"\bshall\b.+\b(and|and/or|or)\b.+\b"
-    r"(send|display|generate|log|store|encrypt|authenticate|authorise|"
-    r"validate|process|record|notify|save|delete|create|update|allow|"
-    r"support|return|lock|complete|handle)\b"
-)
+# Stopwords that don't indicate a second verb clause after "and"
+_STOPWORDS = {
+    "a", "an", "the", "its", "their", "all", "any", "both", "each",
+    "in", "on", "at", "to", "for", "of", "with", "by", "from",
+}
 
 
 class SingularityRule(BaseRule):
@@ -18,13 +17,23 @@ class SingularityRule(BaseRule):
     def apply(self, req: PreprocessedRequirement):
         text = req.normalized
 
-        if re.search(MULTI_BEHAVIOUR_PATTERN, text):
-            return [
-                Finding(
-                    rule_id="SING001",
-                    message="Requirement may contain multiple behaviours and should be split into separate requirements.",
-                    severity="medium"
-                )
-            ]
+        # Multiple "shall" in one requirement is a clear compound obligation
+        if len(re.findall(r"\bshall\b", text)) > 1:
+            return [self._finding()]
+
+        # "shall ... and <verb>" where the word after "and" is not a stopword
+        # This catches: "shall backup data and notify ...", "shall log and archive ..."
+        match = re.search(r"\bshall\b.+?\band\b\s+(\w+)", text)
+        if match:
+            word_after_and = match.group(1)
+            if word_after_and not in _STOPWORDS:
+                return [self._finding()]
 
         return []
+
+    def _finding(self):
+        return Finding(
+            rule_id="SING001",
+            message="Requirement may contain multiple behaviours and should be split into separate requirements.",
+            severity="medium"
+        )

@@ -43,7 +43,7 @@ function App() {
             testability={result.testability_score}
           />
           <FindingsList findings={result.findings} />
-          <SuggestionsList suggestions={result.suggestions} />
+          <SuggestionsList suggestions={result.suggestions} ragError={result.rag_error} />
         </>
       )}
     </div>

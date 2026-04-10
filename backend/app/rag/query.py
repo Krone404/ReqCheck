@@ -2,12 +2,18 @@ import json
 from pathlib import Path
 from typing import List
 
-DATA_FILE = Path(__file__).parent / "data" / "guidlines.json"
+DATA_FILE = Path(__file__).parent / "data" / "guidelines.json"
+
+_KB: dict | None = None
 
 
 def load_knowledge_base() -> dict:
+    global _KB
+    if _KB is not None:
+        return _KB
     with open(DATA_FILE, "r", encoding="utf-8") as file:
-        return json.load(file)
+        _KB = json.load(file)
+    return _KB
 
 
 def retrieve_context(findings: List, analysis_type: str = "single_requirement") -> str:

@@ -28,14 +28,16 @@ class AnalysisEngine:
         testability_score = self.calculate_testability(req, findings)
 
         suggestions = []
+        rag_error = None
         if use_rag and findings:
-            suggestions = rag_pipeline(text, findings)
+            suggestions, rag_error = rag_pipeline(text, findings)
 
         return AnalysisResult(
             findings=findings,
             clarity_score=clarity_score,
             testability_score=testability_score,
-            suggestions=suggestions
+            suggestions=suggestions,
+            rag_error=rag_error,
         )
 
     def calculate_clarity(self, findings):

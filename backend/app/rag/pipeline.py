@@ -1,10 +1,9 @@
 from app.rag.generator import generate
 from app.rag.query import retrieve_context
 
-from app.rag.generator import generate
-from app.rag.query import retrieve_context
 
-def rag_pipeline(text: str, findings: list):
+def rag_pipeline(text: str, findings: list) -> tuple[list[str], str | None]:
+    """Return (suggestions, error_reason). error_reason is None on success."""
     issues = "\n".join([f.message for f in findings])
     context = retrieve_context(findings, analysis_type="single_requirement")
 
@@ -34,7 +33,10 @@ def rag_pipeline(text: str, findings: list):
 
     output = generate(prompt)
 
-    if not output or output.startswith("Error:"):
-        return []
+    if not output:
+        return [], "AI suggestions unavailable — make sure Ollama is running locally."
 
-    return [output.strip()]
+    if output.startswith("Error:"):
+        return [], f"AI suggestions unavailable — {output}"
+
+    return [output.strip()], None

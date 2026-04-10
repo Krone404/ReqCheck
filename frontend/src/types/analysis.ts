@@ -9,4 +9,5 @@ export interface AnalysisResult {
   clarity_score: number;
   testability_score: number;
   suggestions: string[];
+  rag_error?: string | null;
 }

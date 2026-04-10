@@ -4,7 +4,11 @@ from app.models.schemas import Finding
 from app.rules.base_rule import BaseRule
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
-MEASURABLE_PATTERN = r"\b\d+\s?(seconds?|ms|milliseconds?|minutes?|hours?|users?|requests?|mb|gb|%)\b"
+MEASURABLE_PATTERN = (
+    r"\b\d+\.?\d*\s?(%|seconds?|ms|milliseconds?|minutes?|hours?|days?|"
+    r"users?|requests?|transactions?|mb|gb|kb|tb|rps|tps|rpm|hz)\b"
+    r"|\b\d+\.?\d*-second"
+)
 
 
 class MeasurableCriteriaRule(BaseRule):
