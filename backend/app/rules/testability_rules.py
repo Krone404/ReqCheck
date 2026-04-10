@@ -5,7 +5,9 @@ from app.rules.base_rule import BaseRule
 from app.preprocessing.preprocessor import PreprocessedRequirement
 
 MEASURABLE_PATTERN = (
-    r"\b\d+\.?\d*\s?(%|seconds?|ms|milliseconds?|minutes?|hours?|days?|"
+    # Percentages: trailing \b is wrong here (% is non-word), so match separately
+    r"\b\d+\.?\d*\s?%"
+    r"|\b\d+\.?\d*\s?(?:seconds?|ms|milliseconds?|minutes?|hours?|days?|"
     r"users?|requests?|transactions?|mb|gb|kb|tb|rps|tps|rpm|hz)\b"
     r"|\b\d+\.?\d*-second"
 )
