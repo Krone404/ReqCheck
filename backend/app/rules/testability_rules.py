@@ -17,7 +17,8 @@ class MeasurableCriteriaRule(BaseRule):
 
     def apply(self, req: PreprocessedRequirement):
 
-        text = req.normalized
+        # Strip thousands-separator commas so "10,000 users" matches as "10000 users"
+        text = req.normalized.replace(",", "")
 
         # If measurable constraint exists, requirement is testable
         if re.search(MEASURABLE_PATTERN, text):

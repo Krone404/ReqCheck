@@ -147,3 +147,87 @@ class TestSingularityRule:
         # "and the" should not trigger — "the" is a stopword
         findings = self._apply("The system shall store all requests and the responses.")
         assert not any(f.rule_id == "SING001" for f in findings)
+
+    def test_silent_on_protocol_list(self):
+        # "TCP and UDP" are both acronym stopwords — should not fire
+        findings = self._apply("The system shall support TCP and UDP.")
+        assert not any(f.rule_id == "SING001" for f in findings)
+
+
+# ---------------------------------------------------------------------------
+# TypeConsistencyRule (TYPE001 / TYPE002 / TYPE003)
+# ---------------------------------------------------------------------------
+
+from app.rules.type_rules import TypeConsistencyRule
+
+
+class TestTypeConsistencyRule:
+    def _apply(self, text: str, req_type: str):
+        return TypeConsistencyRule(req_type).apply(PreprocessedRequirement(text))
+
+    def test_type001_fires_on_nfr_without_quality_attribute(self):
+        findings = self._apply("The system shall process login requests.", "non_functional")
+        assert any(f.rule_id == "TYPE001" for f in findings)
+
+    def test_type001_silent_on_nfr_with_quality_attribute(self):
+        findings = self._apply("The system shall achieve 99.9% availability.", "non_functional")
+        assert not any(f.rule_id == "TYPE001" for f in findings)
+
+    def test_type002_fires_on_vague_constraint(self):
+        findings = self._apply("The system shall comply with regulations.", "constraint")
+        assert any(f.rule_id == "TYPE002" for f in findings)
+
+    def test_type002_silent_on_specific_constraint(self):
+        findings = self._apply("The system shall comply with GDPR Article 17.", "constraint")
+        assert not any(f.rule_id == "TYPE002" for f in findings)
+
+    def test_type003_fires_on_functional_without_action(self):
+        findings = self._apply("The system shall be available at all times.", "functional")
+        assert any(f.rule_id == "TYPE003" for f in findings)
+
+    def test_type003_silent_on_functional_with_action(self):
+        findings = self._apply(
+            "The system shall authenticate users before granting access.", "functional"
+        )
+        assert not any(f.rule_id == "TYPE003" for f in findings)
+
+    def test_no_finding_on_unknown_type(self):
+        findings = self._apply("The system shall do something.", "unknown")
+        assert findings == []
+
+
+# ---------------------------------------------------------------------------
+# MoSCoWConsistencyRule (MOSC001 / MOSC002)
+# ---------------------------------------------------------------------------
+
+from app.rules.moscow_rules import MoSCoWConsistencyRule
+
+
+class TestMoSCoWConsistencyRule:
+    def _apply(self, text: str, priority: str):
+        return MoSCoWConsistencyRule(priority).apply(PreprocessedRequirement(text))
+
+    def test_mosc001_fires_on_wont_with_shall(self):
+        findings = self._apply("The system shall display a splash screen.", "wont")
+        assert any(f.rule_id == "MOSC001" for f in findings)
+
+    def test_mosc001_silent_on_wont_without_shall(self):
+        findings = self._apply("The system will not display a splash screen.", "wont")
+        assert not any(f.rule_id == "MOSC001" for f in findings)
+
+    def test_mosc002_fires_on_must_with_weak_modal(self):
+        findings = self._apply("The system may authenticate users.", "must")
+        assert any(f.rule_id == "MOSC002" for f in findings)
+
+    def test_mosc002_silent_on_must_with_shall(self):
+        findings = self._apply("The system shall authenticate users.", "must")
+        assert not any(f.rule_id == "MOSC002" for f in findings)
+
+    def test_no_finding_for_should_priority(self):
+        # "should" priority has no MOSC rules — neither fires
+        findings = self._apply("The system may process payments.", "should")
+        assert not any(f.rule_id in ("MOSC001", "MOSC002") for f in findings)
+
+    def test_no_finding_for_could_priority(self):
+        findings = self._apply("The system shall display reports.", "could")
+        assert not any(f.rule_id in ("MOSC001", "MOSC002") for f in findings)

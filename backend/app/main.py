@@ -1,3 +1,4 @@
+import logging
 import os
 
 from fastapi import FastAPI
@@ -5,9 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.analysis import router
 
-app = FastAPI()
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
 
-app.include_router(router, prefix="/api")
+app = FastAPI()
 
 allowed_origins = os.getenv(
     "ALLOWED_ORIGINS",
@@ -21,6 +25,9 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
+
+app.include_router(router, prefix="/api")
+
 
 @app.get("/health")
 def health():

@@ -20,7 +20,12 @@ async def analyse_requirement(
     engine: AnalysisEngine = Depends(get_engine),
 ):
     try:
-        return await engine.analyse(text=req.text, use_rag=req.use_rag)
+        return await engine.analyse(
+            text=req.text,
+            use_rag=req.use_rag,
+            priority=req.priority,
+            req_type=req.type,
+        )
     except Exception:
         logger.exception("Analysis failed for requirement: %s", req.text[:80])
         raise HTTPException(status_code=500, detail="Analysis failed. Please try again.")

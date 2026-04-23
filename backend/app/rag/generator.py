@@ -45,5 +45,5 @@ def _run_ollama(prompt: str) -> str:
 
 async def generate(prompt: str) -> str:
     """Run Ollama without blocking the FastAPI event loop."""
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_running_loop()
     return await loop.run_in_executor(None, _run_ollama, prompt)

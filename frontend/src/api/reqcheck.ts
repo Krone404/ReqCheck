@@ -4,7 +4,9 @@ const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 export async function analyseRequirement(
   text: string,
-  useRag: boolean
+  useRag: boolean,
+  priority: string,
+  reqType: string,
 ): Promise<AnalysisResult> {
   const response = await fetch(`${BASE}/api/analyse`, {
     method: "POST",
@@ -13,7 +15,9 @@ export async function analyseRequirement(
     },
     body: JSON.stringify({
       text,
-      use_rag: useRag,
+      use_rag:  useRag,
+      priority,
+      type:     reqType,
     }),
   });
 
