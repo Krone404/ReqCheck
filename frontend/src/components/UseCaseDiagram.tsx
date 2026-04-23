@@ -54,6 +54,8 @@ export default function UseCaseDiagram({ requirementText, reqType, priority }: P
       <svg
         viewBox="0 0 480 200"
         xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-label={`Use case diagram: ${displayActor} — ${displayAction}`}
         style={{
           width: "100%",
           maxWidth: "480px",
@@ -61,6 +63,7 @@ export default function UseCaseDiagram({ requirementText, reqType, priority }: P
           borderRadius: "8px",
         }}
       >
+        <title>{`Use case: ${displayActor} shall ${displayAction}`}</title>
         {/* System boundary */}
         <rect
           x="160" y="20" width="280" height="160" rx="6"

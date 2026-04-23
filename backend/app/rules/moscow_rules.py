@@ -34,8 +34,8 @@ class MoSCoWConsistencyRule(BaseRule):
                 )]
 
         elif self.priority == "must":
-            if any(re.search(rf"\b{m}\b", text) for m in WEAK_MODALS):
-                matched = [m for m in WEAK_MODALS if re.search(rf"\b{m}\b", text)]
+            matched = [m for m in WEAK_MODALS if re.search(rf"\b{m}\b", text)]
+            if matched:
                 return [Finding(
                     rule_id="MOSC002",
                     message=(

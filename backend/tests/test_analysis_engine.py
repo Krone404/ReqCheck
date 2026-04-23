@@ -22,7 +22,7 @@ async def test_detects_missing_measurement():
 
 
 @pytest.mark.anyio
-async def test_valid_requirement_has_fewer_findings():
+async def test_measurable_requirement_has_full_testability_score():
 
     engine = AnalysisEngine()
     result = await engine.analyse("The system shall respond within 2 seconds.")
@@ -81,3 +81,31 @@ async def test_empty_requirement_scores_low():
     rule_ids = [f.rule_id for f in result.findings]
     assert "STR001" in rule_ids
     assert result.clarity_score < 100
+
+
+@pytest.mark.anyio
+async def test_must_scores_lower_than_wont_for_same_text():
+    """Must-have items use the full 1.0 multiplier; Won't items use 0.55 — same findings,
+    lower penalty, so Won't should score higher."""
+    engine = AnalysisEngine()
+    must_result = await engine.analyse("The system may respond quickly.", priority="must")
+    wont_result = await engine.analyse("The system may respond quickly.", priority="wont")
+    assert must_result.clarity_score < wont_result.clarity_score
+
+
+@pytest.mark.anyio
+async def test_mosc001_fires_at_engine_level():
+    engine = AnalysisEngine()
+    result = await engine.analyse(
+        "The system shall display a splash screen.", priority="wont"
+    )
+    assert any(f.rule_id == "MOSC001" for f in result.findings)
+
+
+@pytest.mark.anyio
+async def test_type001_fires_at_engine_level():
+    engine = AnalysisEngine()
+    result = await engine.analyse(
+        "The system shall process login requests.", req_type="non_functional"
+    )
+    assert any(f.rule_id == "TYPE001" for f in result.findings)

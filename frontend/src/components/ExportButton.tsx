@@ -79,7 +79,9 @@ export default function ExportButton({ requirementText, reqType, priority, resul
     const link    = document.createElement("a");
     link.href     = url;
     link.download = `reqcheck-export-${Date.now()}.txt`;
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
 

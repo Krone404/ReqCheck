@@ -10,13 +10,14 @@ from app.preprocessing.preprocessor import PreprocessedRequirement
 from app.rag.pipeline import rag_pipeline
 
 # Penalty multiplier keyed by MoSCoW priority.
-# Higher-priority requirements demand stricter quality, so their score penalties
-# are amplified; deferred items are penalised less heavily.
+# Must-have items use the 1.0 baseline so scores remain on the familiar 0–100 scale.
+# Lower-priority items receive reduced penalties because quality issues matter less
+# for deferred or optional work.
 _PRIORITY_MULTIPLIER: dict[str, float] = {
-    "must":   1.2,
-    "should": 1.0,
-    "could":  0.8,
-    "wont":   0.6,
+    "must":   1.0,
+    "should": 0.85,
+    "could":  0.70,
+    "wont":   0.55,
 }
 
 

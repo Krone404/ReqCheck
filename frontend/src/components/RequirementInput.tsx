@@ -1,7 +1,7 @@
 import { useState } from "react";
+import type { Priority, ReqType } from "../types/analysis";
 
-export type Priority = "must" | "should" | "could" | "wont";
-export type ReqType  = "functional" | "non_functional" | "constraint";
+export type { Priority, ReqType };
 
 interface Props {
   onAnalyse: (

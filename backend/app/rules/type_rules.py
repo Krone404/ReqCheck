@@ -18,13 +18,13 @@ _CONSTRAINT_SPECIFICITY = re.compile(
     re.IGNORECASE,
 )
 
-# Functional requirements should contain a recognisable system action verb
-_FUNCTIONAL_VERB = re.compile(
-    r"\bshall\s+(allow|enable|provide|generate|process|store|retrieve|display|send|"
-    r"receive|validate|authenticate|authorise|authorize|calculate|create|update|"
-    r"delete|notify|export|import|log|search|filter|sort|schedule|trigger|detect|"
-    r"monitor|enforce|encrypt|decrypt|backup|restore|register|submit|upload|download|"
-    r"parse|convert|format|assign|revoke|grant)\b"
+# Fire TYPE003 only when "shall" is immediately followed by a pure state verb —
+# these describe what the system IS rather than what it DOES, which is a strong
+# signal that a functional requirement is mis-typed or underspecified.
+# Using an inverted (deny-list) approach avoids false positives on the long tail
+# of valid action verbs ("support", "handle", "respond", "track", etc.).
+_STATE_VERB_ONLY = re.compile(
+    r"\bshall\s+(be|become|remain|stay|exist|have|contain|consist|include)\b"
 )
 
 
@@ -68,13 +68,15 @@ class TypeConsistencyRule(BaseRule):
                 )]
 
         elif self.req_type == "functional":
-            if not _FUNCTIONAL_VERB.search(text):
+            if _STATE_VERB_ONLY.search(text):
                 return [Finding(
                     rule_id="TYPE003",
                     message=(
-                        "This functional requirement does not contain a clear system action "
-                        "verb (e.g. 'shall authenticate', 'shall generate', 'shall validate'). "
-                        "Functional requirements must describe a specific system behaviour."
+                        "This functional requirement uses a state verb after 'shall' "
+                        "(e.g. 'shall be', 'shall remain', 'shall have'). "
+                        "Functional requirements should describe a system action, not a state — "
+                        "consider rewriting with an active verb (e.g. 'shall authenticate', "
+                        "'shall store', 'shall respond')."
                     ),
                     severity="low",
                 )]

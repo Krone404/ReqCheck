@@ -14,7 +14,7 @@ _INCOMPLETE_PATTERNS = [
     r"\bto\s+be\s+resolved\b",
     r"\bsee\s+above\b",
     r"\bas\s+needed\b",
-    r"\bas\s+required\b",
+    r"\bas\s+required(?!\s+by\b)",   # "as required" but NOT "as required by <named source>"
     r"\bdetails\s+to\s+follow\b",
     r"\betc\.?\b",
     r"\band\s+so\s+on\b",

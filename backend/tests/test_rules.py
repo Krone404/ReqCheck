@@ -6,10 +6,11 @@ Tests cover at least one positive case (rule fires) and one negative case
 """
 import pytest
 from app.preprocessing.preprocessor import PreprocessedRequirement
-from app.rules.testability_rules import MeasurableCriteriaRule
 from app.rules.ambiguity_rules import AmbiguityRule
-from app.rules.structure_rules import ShallRule
+from app.rules.completeness_rules import CompletenessRule
 from app.rules.singularity_rules import SingularityRule
+from app.rules.structure_rules import ShallRule
+from app.rules.testability_rules import MeasurableCriteriaRule
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +156,46 @@ class TestSingularityRule:
 
 
 # ---------------------------------------------------------------------------
+# CompletenessRule (COMP001)
+# ---------------------------------------------------------------------------
+
+class TestCompletenessRule:
+    rule = CompletenessRule()
+
+    def _apply(self, text: str):
+        return self.rule.apply(PreprocessedRequirement(text))
+
+    def test_fires_on_tbd(self):
+        findings = self._apply("The system shall support TBD authentication methods.")
+        assert any(f.rule_id == "COMP001" for f in findings)
+
+    def test_fires_on_etc(self):
+        findings = self._apply("The system shall support PDF, CSV, etc.")
+        assert any(f.rule_id == "COMP001" for f in findings)
+
+    def test_fires_on_to_be_determined(self):
+        findings = self._apply("Response time to be determined.")
+        assert any(f.rule_id == "COMP001" for f in findings)
+
+    def test_fires_on_and_so_on(self):
+        findings = self._apply("The system shall handle GET, POST, and so on.")
+        assert any(f.rule_id == "COMP001" for f in findings)
+
+    def test_silent_on_complete_requirement(self):
+        findings = self._apply(
+            "The system shall respond within 2 seconds under 500 concurrent users."
+        )
+        assert not any(f.rule_id == "COMP001" for f in findings)
+
+    def test_silent_on_as_required_by(self):
+        # "as required by <named source>" is a valid specific reference, not a placeholder
+        findings = self._apply(
+            "The system shall encrypt data as required by GDPR Article 25."
+        )
+        assert not any(f.rule_id == "COMP001" for f in findings)
+
+
+# ---------------------------------------------------------------------------
 # TypeConsistencyRule (TYPE001 / TYPE002 / TYPE003)
 # ---------------------------------------------------------------------------
 
@@ -181,14 +222,24 @@ class TestTypeConsistencyRule:
         findings = self._apply("The system shall comply with GDPR Article 17.", "constraint")
         assert not any(f.rule_id == "TYPE002" for f in findings)
 
-    def test_type003_fires_on_functional_without_action(self):
+    def test_type003_fires_on_state_verb(self):
+        # "shall be" is a state verb — fires TYPE003
         findings = self._apply("The system shall be available at all times.", "functional")
         assert any(f.rule_id == "TYPE003" for f in findings)
 
-    def test_type003_silent_on_functional_with_action(self):
+    def test_type003_fires_on_shall_remain(self):
+        findings = self._apply("The system shall remain active during maintenance.", "functional")
+        assert any(f.rule_id == "TYPE003" for f in findings)
+
+    def test_type003_silent_on_action_verb(self):
         findings = self._apply(
             "The system shall authenticate users before granting access.", "functional"
         )
+        assert not any(f.rule_id == "TYPE003" for f in findings)
+
+    def test_type003_silent_on_common_unlisted_verb(self):
+        # "respond", "support", "handle" are valid action verbs not in the old allowlist
+        findings = self._apply("The system shall respond within 2 seconds.", "functional")
         assert not any(f.rule_id == "TYPE003" for f in findings)
 
     def test_no_finding_on_unknown_type(self):

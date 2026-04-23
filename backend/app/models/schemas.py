@@ -3,8 +3,9 @@ from typing import Annotated, List, Literal, Optional
 
 class RequirementInput(BaseModel):
     text: Annotated[str, Field(min_length=1, max_length=1000)]
-    # type and priority are accepted for future rule-weighting; defaults provided
-    # so callers that omit them are not rejected
+    # type drives TypeConsistencyRule (TYPE001/TYPE002/TYPE003);
+    # priority drives MoSCoWConsistencyRule (MOSC001/MOSC002) and the score multiplier.
+    # Both default to the most common case so callers that omit them are not rejected.
     type: Literal["functional", "non_functional", "constraint"] = "functional"
     priority: Literal["must", "should", "could", "wont"] = "must"
     use_rag: bool = False
