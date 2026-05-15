@@ -10,8 +10,6 @@ class PreprocessedRequirement:
 
         self.tokens = self._tokenize(self.normalized)
 
-        self.word_count = len(self.tokens)
-
 
     def _tokenize(self, text: str):
 

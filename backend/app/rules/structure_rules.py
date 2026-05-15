@@ -2,18 +2,26 @@ import re
 from app.rules.base_rule import BaseRule
 from app.models.schemas import Finding
 from app.preprocessing.preprocessor import PreprocessedRequirement
+from app.rules.ambiguity_rules import WEAK_MODALS as _WEAK_MODALS
+
 
 class ShallRule(BaseRule):
 
     def apply(self, req: PreprocessedRequirement):
+        text = req.normalized
 
-        if not re.search(r"\bshall\b", req.normalized):
-            return [
-                Finding(
-                    rule_id="STR001",
-                    message="Requirement should use 'shall' for clarity and testability.",
-                    severity="low"
-                )
-            ]
+        if re.search(r"\bshall\b", text):
+            return []
 
-        return []
+        # AMB002 already fires for weak modals at higher severity — suppress STR001
+        # to avoid penalising the same root cause twice
+        if any(re.search(rf"\b{m}\b", text) for m in _WEAK_MODALS):
+            return []
+
+        return [
+            Finding(
+                rule_id="STR001",
+                message="Requirement should use 'shall' for clarity and testability.",
+                severity="low"
+            )
+        ]

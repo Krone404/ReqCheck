@@ -1,0 +1,732 @@
+{
+  "standard": "ISO/IEC/IEEE 29148:2018",
+  "title": "Systems and software engineering \u2014 Life cycle processes \u2014 Requirements engineering",
+  "version": "1.0.0",
+  "sections_covered": [
+    "5.2.4",
+    "5.2.5",
+    "5.2.6",
+    "5.2.7"
+  ],
+  "usage": {
+    "single_requirement": [
+      "individual",
+      "language",
+      "construction"
+    ],
+    "set_analysis": [
+      "set"
+    ]
+  },
+  "rules": [
+    {
+      "id": "ISO_NECESSARY",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "Each requirement shall define an essential capability, characteristic, constraint or quality factor. Removing it would create a deficiency that no other requirement can fulfil.",
+      "guidance": "Ask 'if this requirement were removed, would the system fail to meet a stakeholder need?' If the answer is no, the requirement is not necessary. Remove cosmetic, gold-plated, or redundant requirements. Requirements with planned expiration or applicability dates shall be clearly identified.",
+      "rewrite_tip": "Remove the requirement if it does not trace to a stakeholder need, or rewrite it to express only the essential capability that would be missing without it.",
+      "bad_examples": [
+        "The system shall display a splash screen with the company logo for 5 seconds on startup.",
+        "The system shall use the colour blue for all primary buttons.",
+        "The system shall log every mouse movement to the database."
+      ],
+      "good_examples": [
+        "The system shall authenticate users before granting access to protected resources.",
+        "The system shall encrypt all personally identifiable information at rest using AES-256.",
+        "The system shall generate an audit trail for every financial transaction."
+      ],
+      "detect_hints": [
+        "nice to have",
+        "optionally",
+        "ideally",
+        "if time permits",
+        "cosmetic",
+        "decorative"
+      ]
+    },
+    {
+      "id": "ISO_APPROPRIATE",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "The level of detail in a requirement shall be appropriate to the entity it addresses. Requirements shall avoid imposing unnecessary design constraints while preserving implementation independence.",
+      "guidance": "Requirements should state WHAT the system must do, not HOW. Naming specific products, technologies, or internal architectures turns a requirement into a design decision. Keep the solution space open unless a genuine constraint (e.g., mandated interface, regulation) forces a specific choice. Design rationale belongs in attributes, not in the requirement statement.",
+      "rewrite_tip": "Strip out technology names, design patterns, and implementation details. Restate the requirement in terms of the capability or constraint the system must satisfy.",
+      "bad_examples": [
+        "The system shall use a PostgreSQL 15 database with B-tree indexes on all primary keys.",
+        "The login page shall be implemented as a React component using Redux for state management.",
+        "The system shall store session tokens in Redis with a TTL of 3600 seconds."
+      ],
+      "good_examples": [
+        "The system shall persist all user account data in a manner that supports concurrent access by up to 500 users.",
+        "The system shall provide a login interface that authenticates users within 3 seconds.",
+        "The system shall maintain user session state with automatic expiry after 60 minutes of inactivity."
+      ],
+      "detect_hints": [
+        "PostgreSQL",
+        "MySQL",
+        "React",
+        "Angular",
+        "Redis",
+        "MongoDB",
+        "implemented using",
+        "coded in",
+        "built with",
+        "architecture shall"
+      ]
+    },
+    {
+      "id": "ISO_UNAMBIGUOUS",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [
+        "AMB001"
+      ],
+      "rule": "Each requirement shall be stated so that it can be interpreted in only one way. The requirement shall be stated simply and be easy to understand.",
+      "guidance": "Replace every vague adjective or adverb with a measurable value or precise definition. If a term could be understood differently by two competent readers, it is ambiguous. Refer to ISO_LANG_NO_AMBIGUOUS_TERMS for the full list of banned term categories.",
+      "rewrite_tip": "Replace every vague adjective or adverb with a measurable value or a precisely defined term. If two readers could interpret it differently, reword it.",
+      "bad_examples": [
+        "The system should be fast.",
+        "The interface should be user-friendly.",
+        "The system shall handle a large number of users.",
+        "The system shall respond quickly under normal conditions.",
+        "The report shall be generated in a reasonable time.",
+        "The system shall provide adequate storage."
+      ],
+      "good_examples": [
+        "The system shall respond to any user query within 2 seconds under a load of 500 concurrent users.",
+        "The interface shall allow users to complete the checkout process in no more than 3 steps.",
+        "The system shall support a minimum of 10,000 concurrent user sessions.",
+        "The system shall return search results within 500 milliseconds for queries against up to 1 million records.",
+        "The system shall generate the monthly sales report within 30 seconds of the user request.",
+        "The system shall provide a minimum of 500 GB of document storage per tenant."
+      ],
+      "detect_hints": [
+        "fast",
+        "efficient",
+        "user-friendly",
+        "intuitive",
+        "easy",
+        "adequate",
+        "sufficient",
+        "reasonable",
+        "normal",
+        "appropriate",
+        "quick",
+        "large",
+        "small",
+        "good",
+        "high",
+        "low",
+        "robust",
+        "flexible",
+        "scalable",
+        "seamless",
+        "powerful",
+        "lightweight",
+        "smart",
+        "modern",
+        "properly",
+        "timely",
+        "significant"
+      ]
+    },
+    {
+      "id": "ISO_COMPLETE",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [
+        "COMP001"
+      ],
+      "rule": "Each requirement shall sufficiently describe the necessary capability, characteristic, constraint or quality factor to meet the entity need without needing other information to understand the requirement.",
+      "guidance": "A complete requirement answers: WHO or WHAT (subject), does WHAT (action/constraint), under WHICH conditions, to WHAT measurable extent? If any of these are missing, the requirement is incomplete. Missing subjects, missing conditions, and missing performance thresholds are the most common gaps.",
+      "rewrite_tip": "Add the missing element: identify the subject (who/what), the action (does what), the conditions (under which circumstances), and the measurable acceptance criterion.",
+      "bad_examples": [
+        "Must load quickly.",
+        "Users should be able to log in.",
+        "Handle errors appropriately.",
+        "Data shall be backed up.",
+        "The system shall validate input.",
+        "Notifications shall be sent."
+      ],
+      "good_examples": [
+        "The system shall load the dashboard within 2 seconds after user login on a connection of 10 Mbps or greater.",
+        "The system shall allow registered users to log in using an email address and password via the web interface.",
+        "The system shall display an error message within 1 second when a user submits a form with invalid fields, identifying each invalid field.",
+        "The system shall perform a full incremental backup of all user data to a geographically separate site every 24 hours, retaining backups for 90 days.",
+        "The system shall validate that all date-of-birth fields contain a value in ISO 8601 format and represent a date not in the future.",
+        "The system shall send an email notification to the account holder within 5 minutes of a password change."
+      ],
+      "detect_hints": [
+        "etc.",
+        "and so on",
+        "TBD",
+        "TBS",
+        "TBR",
+        "to be determined",
+        "to be specified",
+        "to be resolved",
+        "see above",
+        "as needed",
+        "as required",
+        "details to follow"
+      ]
+    },
+    {
+      "id": "ISO_SINGULAR",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "Each requirement shall state a single capability, characteristic, constraint or quality factor.",
+      "guidance": "A requirement that uses 'and' or 'or' to join distinct behaviours likely contains multiple requirements and should be split. Each atomic requirement is independently testable and traceable. Note: a single requirement may still have multiple conditions under which it must be met.",
+      "rewrite_tip": "Split the requirement at each 'and'/'or' that joins distinct behaviours into separate, independently testable requirements.",
+      "bad_examples": [
+        "The system shall log users in and send a welcome notification.",
+        "The system shall encrypt data at rest and in transit and log all access attempts.",
+        "The system shall authenticate users, authorise their roles, and record the session start time.",
+        "The system shall generate invoices and email them to customers on the first of each month."
+      ],
+      "good_examples": [
+        "The system shall authenticate users via email and password.",
+        "The system shall send a welcome notification upon successful login.",
+        "The system shall encrypt all stored data at rest using AES-256.",
+        "The system shall encrypt all data in transit using TLS 1.2 or later.",
+        "The system shall log every data-access attempt, recording user ID, timestamp, and resource accessed.",
+        "The system shall generate monthly invoices on the first day of each calendar month.",
+        "The system shall email each generated invoice to the associated customer within 1 hour of generation."
+      ],
+      "detect_hints": [
+        "and shall",
+        "and also",
+        "in addition",
+        "as well as",
+        "along with",
+        "additionally",
+        "also shall",
+        "shall both",
+        "shall .+ and .+ and"
+      ]
+    },
+    {
+      "id": "ISO_FEASIBLE",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "Each requirement shall be realisable within system constraints (e.g., cost, schedule, technical) with acceptable risk.",
+      "guidance": "Requirements demanding perfection (100%, zero defects, unlimited, instant) are almost never feasible. Every quantitative target should be grounded in realistic constraints. Consider available technology maturity, budget, schedule, and operational environment. Flag requirements whose technical risk has not been assessed.",
+      "rewrite_tip": "Replace absolute targets (100%, zero, unlimited, instant) with realistic, evidence-based thresholds that include tolerances and boundary conditions.",
+      "bad_examples": [
+        "The system shall achieve 100% uptime with zero data loss under all conditions.",
+        "The system shall process an unlimited number of simultaneous users.",
+        "The system shall predict user behaviour with 100% accuracy.",
+        "The system shall respond to all queries in under 1 millisecond regardless of data volume."
+      ],
+      "good_examples": [
+        "The system shall achieve 99.95% uptime measured monthly, excluding planned maintenance windows.",
+        "The system shall support up to 50,000 concurrent user sessions.",
+        "The system shall recommend products with a measured precision of at least 75% on the test dataset.",
+        "The system shall respond to catalogue search queries within 500 milliseconds for datasets up to 10 million records."
+      ],
+      "detect_hints": [
+        "100%",
+        "zero downtime",
+        "unlimited",
+        "infinite",
+        "no failures",
+        "no errors",
+        "instant",
+        "always available",
+        "never fail",
+        "perfect"
+      ]
+    },
+    {
+      "id": "ISO_VERIFIABLE",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [
+        "TEST001"
+      ],
+      "rule": "Each requirement shall be structured and worded such that its realisation can be proven (verified) to the customer's satisfaction. Verifiability is enhanced when the requirement is measurable.",
+      "guidance": "If you cannot describe a test, inspection, analysis, or demonstration that would prove the requirement is met, the requirement is not verifiable. Replace qualitative adjectives (reliable, secure, maintainable) with quantitative acceptance criteria. Every requirement should map to at least one verification method.",
+      "rewrite_tip": "Rewrite the qualitative adjective (reliable, secure, maintainable) as a quantitative acceptance criterion tied to a specific test method: measurement, inspection, analysis, or demonstration.",
+      "bad_examples": [
+        "The system should perform well.",
+        "The system shall be reliable.",
+        "The system shall be secure.",
+        "The system shall provide a good user experience.",
+        "The system shall be maintainable."
+      ],
+      "good_examples": [
+        "The system shall process a minimum of 1,000 requests per minute with a failure rate below 1%.",
+        "The system shall have a mean time between failures (MTBF) of at least 720 hours.",
+        "The system shall pass all tests in the OWASP Top 10 verification checklist without critical findings.",
+        "Users shall complete the primary purchase flow with a task-success rate of at least 95% in usability testing.",
+        "A developer with no prior exposure to the codebase shall be able to locate and fix a seeded defect of moderate complexity within 4 hours."
+      ],
+      "detect_hints": [
+        "reliable",
+        "secure",
+        "maintainable",
+        "high quality",
+        "high performance",
+        "best in class",
+        "world class",
+        "state of the art",
+        "top notch",
+        "cutting edge",
+        "well designed",
+        "good enough"
+      ]
+    },
+    {
+      "id": "ISO_CORRECT",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "Each requirement shall be an accurate representation of the entity need from which it was transformed.",
+      "guidance": "Trace every requirement back to its originating stakeholder need. A requirement is incorrect if it over-constrains, under-constrains, or misrepresents the original need. Review with the stakeholder who raised the need to confirm the transformation is faithful.",
+      "rewrite_tip": "Cross-check the requirement against its originating stakeholder need. Rewrite so the obligation faithfully reflects the need without over-constraining or under-constraining the solution.",
+      "bad_examples": [
+        "The system shall require users to change passwords every 7 days. [Stakeholder need: 'Protect accounts from credential compromise.']",
+        "The system shall prevent users from copying text from the help pages. [Stakeholder need: 'Protect intellectual property in documentation.']"
+      ],
+      "good_examples": [
+        "The system shall enforce a maximum password age of 90 days and require passwords of at least 12 characters including uppercase, lowercase, numeric, and special characters. [Stakeholder need: 'Protect accounts from credential compromise.']",
+        "The system shall display help content with a visible copyright notice and disable bulk-download functionality. [Stakeholder need: 'Protect intellectual property in documentation.']"
+      ],
+      "detect_hints": []
+    },
+    {
+      "id": "ISO_CONFORMING",
+      "section": "5.2.5",
+      "category": "individual",
+      "mapped_rules": [],
+      "rule": "Each requirement shall conform to an approved standard template and style for writing requirements, when applicable.",
+      "guidance": "Every requirement should follow the agreed sentence template: [Condition] Subject 'shall' Action [Measurable Criterion]. Informal phrasing, missing subjects, imperative mood ('Make sure...'), and colloquial language violate conformance. Define the template and enforce it consistently across the entire specification.",
+      "rewrite_tip": "Rewrite the statement to follow the standard template: [Condition] + Subject + 'shall' + Action + [Measurable Criterion]. Remove informal phrasing, imperative mood, and colloquial language.",
+      "bad_examples": [
+        "Login must work.",
+        "Make sure data is saved.",
+        "Don't let the system crash.",
+        "The quick response time is important."
+      ],
+      "good_examples": [
+        "The system shall authenticate users using email and password credentials.",
+        "The system shall persist all form data to the database within 1 second of user submission.",
+        "The system shall recover from any unhandled exception within 30 seconds without data loss.",
+        "The system shall respond to user-initiated queries within 2 seconds under standard load conditions."
+      ],
+      "detect_hints": [
+        "must work",
+        "make sure",
+        "don't",
+        "do not let",
+        "we need",
+        "please",
+        "remember to",
+        "try to",
+        "important that"
+      ]
+    },
+    {
+      "id": "ISO_SET_COMPLETE",
+      "section": "5.2.6",
+      "category": "set",
+      "mapped_rules": [
+        "COMP001"
+      ],
+      "rule": "The set of requirements shall stand alone such that it sufficiently describes the necessary capabilities, characteristics, constraints and quality factors to meet entity needs. The set shall contain no unresolved TBD, TBS, or TBR clauses.",
+      "guidance": "Scan the full specification for TBD/TBS/TBR placeholders and unresolved cross-references. Every placeholder represents a gap. The set cannot be baselined until all placeholders are resolved. Also check that all relevant requirement types are covered: functional, performance, interface, security, data, usability, environmental, and regulatory.",
+      "rewrite_tip": "Resolve every TBD/TBS/TBR placeholder with a concrete value. Identify any missing requirement types (functional, performance, interface, security, data) and add them.",
+      "bad_examples": [
+        "Performance thresholds: TBD.",
+        "Authentication mechanism: To be specified after vendor selection.",
+        "The backup frequency shall be determined later.",
+        "See other document for security requirements. [Document not referenced or available.]"
+      ],
+      "good_examples": [
+        "The system shall respond to API requests within 200 milliseconds at the 95th percentile under a load of 1,000 concurrent users.",
+        "The system shall authenticate users via OAuth 2.0 with PKCE using the organisation's identity provider.",
+        "The system shall perform incremental backups every 6 hours and full backups every 24 hours.",
+        "The system shall enforce the access-control rules defined in Section 4.3 of this specification."
+      ],
+      "detect_hints": [
+        "TBD",
+        "TBS",
+        "TBR",
+        "to be determined",
+        "to be specified",
+        "to be resolved",
+        "to be decided",
+        "to be confirmed",
+        "not yet defined",
+        "pending",
+        "placeholder",
+        "TODO",
+        "FIXME"
+      ]
+    },
+    {
+      "id": "ISO_SET_CONSISTENT",
+      "section": "5.2.6",
+      "category": "set",
+      "mapped_rules": [
+        "CONS001"
+      ],
+      "rule": "The set of requirements shall contain individual requirements that are unique, do not conflict with or overlap other requirements, use homogeneous units of measurement, and apply terminology consistently.",
+      "guidance": "Cross-check requirements for contradictions in behaviour, timing, units, or terminology. Maintain a project glossary and ensure every term is used in exactly one meaning throughout the set. Use consistent units (do not mix seconds and milliseconds, MB and GB, etc. without conversion). Remove or merge duplicates.",
+      "rewrite_tip": "Align conflicting values, unify terminology to match the project glossary, standardise units of measurement, and remove or merge duplicate requirements.",
+      "bad_examples": [
+        "REQ-01: The system shall store timestamps in UTC.\nREQ-47: The system shall display all times in local server time.",
+        "REQ-12: The system shall retain user data for 30 days after account deletion.\nREQ-88: The system shall permanently delete all user data immediately upon account deletion.",
+        "REQ-05 uses 'client' and REQ-22 uses 'customer' and REQ-41 uses 'end user' to refer to the same stakeholder.",
+        "REQ-10: Response time shall be less than 200ms.\nREQ-33: Latency shall not exceed 0.5s. [Both refer to the same API, with different values and terms.]"
+      ],
+      "good_examples": [
+        "REQ-01: The system shall store all timestamps in UTC.\nREQ-47: The system shall display times converted from UTC to the user's configured time zone.",
+        "REQ-12: The system shall soft-delete user data upon account deletion and permanently purge it after 30 days.",
+        "All requirements use the term 'customer' consistently to refer to the end user of the system, as defined in the glossary.",
+        "REQ-10: The API shall respond within 200 milliseconds at the 95th percentile.\nREQ-33: [Removed as duplicate of REQ-10.]"
+      ],
+      "detect_hints": [
+        "conflict",
+        "contradict",
+        "duplicate",
+        "overlap"
+      ]
+    },
+    {
+      "id": "ISO_SET_FEASIBLE",
+      "section": "5.2.6",
+      "category": "set",
+      "mapped_rules": [],
+      "rule": "The complete set of requirements shall be realisable together within entity constraints (e.g., cost, schedule, technical) with acceptable risk. This includes the concept of affordable.",
+      "guidance": "Individual requirements may each be feasible in isolation yet infeasible in combination due to resource contention, contradictory constraints, or cumulative cost. Assess the set as a whole against budget, timeline, team capacity, and technology readiness. Flag mutually exclusive or resource-competing requirements.",
+      "rewrite_tip": "Identify resource conflicts or contradictions between requirements when taken as a whole. Adjust targets or add constraints so the combined set is achievable within budget, schedule, and technical limits.",
+      "bad_examples": [
+        "The system shall achieve sub-millisecond response times [REQ-10] while performing real-time encryption of all data fields [REQ-22] on a single-core embedded processor [CONSTRAINT-03].",
+        "The full system shall be delivered within 4 weeks [CONSTRAINT-01] with 200 requirements spanning 8 subsystems [scope]."
+      ],
+      "good_examples": [
+        "Response-time targets [REQ-10] have been validated against the encryption overhead [REQ-22] on the target hardware [CONSTRAINT-03] through prototype benchmarking.",
+        "The delivery schedule [CONSTRAINT-01] has been validated against the work-breakdown structure and resource plan, with identified risks and mitigations documented."
+      ],
+      "detect_hints": []
+    },
+    {
+      "id": "ISO_SET_COMPREHENSIBLE",
+      "section": "5.2.6",
+      "category": "set",
+      "mapped_rules": [],
+      "rule": "The set of requirements shall be written such that it is clear what is expected by the entity and its relation to the system of which it is a part.",
+      "guidance": "Organise requirements logically so that any stakeholder can navigate the set and understand the overall expected behaviour. Use clear grouping, cross-references, a glossary, and a traceability matrix. A set that cannot be understood as a whole cannot be validated as a whole.",
+      "rewrite_tip": "Reorganise requirements into logical groups, add cross-references, define all acronyms in the glossary, and ensure the numbering scheme reflects the system hierarchy.",
+      "bad_examples": [
+        "A specification that scatters related authentication requirements across 12 non-contiguous sections with no traceability matrix.",
+        "Requirements written in dense, legalistic prose with undefined acronyms and no logical grouping."
+      ],
+      "good_examples": [
+        "Requirements are organised by functional area (authentication, authorisation, data management, reporting) with a traceability matrix linking each requirement to its parent stakeholder need.",
+        "Every acronym is defined in the glossary; requirements use consistent heading levels and a numbering scheme that reflects the system hierarchy."
+      ],
+      "detect_hints": []
+    },
+    {
+      "id": "ISO_SET_VALIDATABLE",
+      "section": "5.2.6",
+      "category": "set",
+      "mapped_rules": [],
+      "rule": "It shall be practicable to demonstrate that satisfaction of the requirement set will lead to the achievement of the entity needs within constraints.",
+      "guidance": "Validation asks 'are we building the right system?' (not just 'did we build it right?'). The set must trace upward to stakeholder needs so that satisfying all requirements demonstrably satisfies the purpose. Include or reference a validation strategy.",
+      "rewrite_tip": "Add traceability links from every requirement to at least one stakeholder need, and ensure every stakeholder need is covered by at least one requirement.",
+      "bad_examples": [
+        "A set of 400 functional requirements with no mapping to stakeholder objectives, making it impossible to confirm the system will satisfy its purpose.",
+        "Requirements that are individually verifiable but collectively do not address the core business problem."
+      ],
+      "good_examples": [
+        "Every requirement traces to at least one stakeholder need, and every stakeholder need is addressed by at least one requirement. A validation plan maps system-level acceptance tests to business objectives.",
+        "The specification includes a concept of operations (ConOps) that demonstrates how the requirements, when fulfilled, support each operational scenario."
+      ],
+      "detect_hints": []
+    },
+    {
+      "id": "ISO_LANG_SHALL",
+      "section": "5.2.7",
+      "category": "language",
+      "mapped_rules": [
+        "STR001"
+      ],
+      "rule": "Requirements shall use 'shall' for mandatory binding provisions. 'Will' denotes statements of fact or context. 'Should' denotes non-mandatory goals. 'May' denotes suggestions or permissions.",
+      "guidance": "Use 'shall' and only 'shall' to express mandatory requirements. Avoid 'must' (often confused with 'shall'), 'will' (reserved for facts/context), 'should' (goals, not requirements), 'may' (permissions), 'can' (capability descriptions), and 'needs to' (informal). Avoid passive constructions like 'it is required that'.",
+      "rewrite_tip": "Replace 'should', 'must', 'can', 'will', 'needs to', or passive constructions with 'shall' for every mandatory provision.",
+      "bad_examples": [
+        "The system should allow users to log in.",
+        "The system can store data.",
+        "The system must validate input before processing.",
+        "The system will encrypt all communications.",
+        "The system needs to support two-factor authentication.",
+        "It is required that the system log all access attempts."
+      ],
+      "good_examples": [
+        "The system shall allow registered users to log in via email and password.",
+        "The system shall store user data in an encrypted format.",
+        "The system shall validate all input fields before processing form submissions.",
+        "The system shall encrypt all communications using TLS 1.2 or later.",
+        "The system shall support two-factor authentication via TOTP.",
+        "The system shall log all access attempts, recording user ID, timestamp, and outcome."
+      ],
+      "detect_hints": [
+        "should",
+        "must",
+        "can",
+        "could",
+        "will",
+        "may",
+        "might",
+        "needs to",
+        "ought to",
+        "has to",
+        "is required",
+        "is expected",
+        "it is necessary"
+      ]
+    },
+    {
+      "id": "ISO_LANG_NO_AMBIGUOUS_TERMS",
+      "section": "5.2.7",
+      "category": "language",
+      "mapped_rules": [
+        "AMB001"
+      ],
+      "rule": "Vague and general terms shall be avoided. The standard identifies the following categories of banned terms: superlatives, subjective language, vague pronouns, ambiguous adverbs and adjectives, open-ended terms, comparative phrases, loopholes, totality terms, and incomplete references.",
+      "guidance": "Specific banned-term categories from the standard:\n\u2022 Superlatives: 'best', 'most', 'least', 'worst'.\n\u2022 Subjective language: 'user-friendly', 'easy to use', 'cost effective', 'simple', 'intuitive'.\n\u2022 Vague pronouns: 'it', 'this', 'that', 'they' \u2014 always name the subject explicitly.\n\u2022 Ambiguous adverbs/adjectives: 'almost always', 'significant', 'minimal', 'nearly', 'essentially'.\n\u2022 Ambiguous logical connectors: 'or', 'and/or' \u2014 split into separate, explicit requirements.\n\u2022 Open-ended terms: 'provide support', 'but not limited to', 'as a minimum', 'including but not limited to'.\n\u2022 Comparative phrases: 'better than', 'higher quality', 'improved', 'faster than'.\n\u2022 Loopholes: 'if possible', 'as appropriate', 'as applicable', 'where practicable', 'when feasible'.\n\u2022 Totality terms: 'all', 'always', 'never', 'every', 'none' \u2014 extremely hard to verify.\n\u2022 Incomplete references: citing a standard or document without edition, date, version, and applicable clauses.",
+      "rewrite_tip": "Identify the banned-term category (superlative, subjective, vague pronoun, loophole, etc.) and replace it with a specific, measurable, or explicitly defined term.",
+      "bad_examples": [
+        "The system shall provide the best performance.",
+        "The system shall be cost effective.",
+        "It shall send a notification when it completes.",
+        "The system shall almost always be available.",
+        "The system shall provide support for, but not limited to, PDF and CSV formats.",
+        "The system shall deliver better quality than the previous version.",
+        "The system shall log events if possible.",
+        "The system shall handle all edge cases.",
+        "The system shall conform to ISO 27001."
+      ],
+      "good_examples": [
+        "The system shall respond to queries within 200 milliseconds at the 95th percentile.",
+        "The system shall operate within a total annual hosting budget of $120,000.",
+        "The notification service shall send an email to the user within 60 seconds of report generation completing.",
+        "The system shall maintain 99.9% availability measured over each calendar month.",
+        "The system shall export reports in PDF and CSV formats.",
+        "The system shall reduce average defect density to fewer than 0.5 defects per KLOC.",
+        "The system shall log all authentication events, including failed attempts.",
+        "The system shall handle the boundary conditions defined in test cases TC-101 through TC-118.",
+        "The system shall conform to ISO/IEC 27001:2022, clauses 5 through 10."
+      ],
+      "detect_hints": [
+        "best",
+        "most",
+        "least",
+        "worst",
+        "user-friendly",
+        "easy to use",
+        "cost effective",
+        "simple",
+        "intuitive",
+        "it",
+        "this",
+        "that",
+        "almost always",
+        "significant",
+        "minimal",
+        "nearly",
+        "essentially",
+        "and/or",
+        "or",
+        "provide support",
+        "but not limited to",
+        "as a minimum",
+        "including but not limited to",
+        "at least",
+        "better than",
+        "higher quality",
+        "improved",
+        "faster than",
+        "if possible",
+        "as appropriate",
+        "as applicable",
+        "where practicable",
+        "when feasible",
+        "all",
+        "always",
+        "never",
+        "every",
+        "none",
+        "etc.",
+        "e.g."
+      ]
+    },
+    {
+      "id": "ISO_LANG_ACTIVE_POSITIVE",
+      "section": "5.2.7",
+      "category": "language",
+      "mapped_rules": [],
+      "rule": "Requirements shall use active voice and positive statements. Passive voice and negative requirements ('shall not') shall be avoided.",
+      "guidance": "Active voice makes the subject (actor) explicit, which aids testability and accountability. Positive statements describe what the system SHALL DO rather than what it shall not do. When you encounter 'shall not', rewrite as a positive obligation. Avoid 'shall be able to' \u2014 use 'shall' directly.",
+      "rewrite_tip": "Convert passive voice to active voice by naming the subject explicitly. Rewrite negative statements ('shall not') as positive obligations describing what the system shall do.",
+      "bad_examples": [
+        "It is required that data be encrypted.",
+        "The report shall be generated by the system.",
+        "The password shall not be stored in plain text.",
+        "Unauthorised access shall not be permitted.",
+        "Inputs that are invalid shall be rejected by the validation module.",
+        "The system shall not allow more than 3 failed login attempts."
+      ],
+      "good_examples": [
+        "The system shall encrypt all data at rest using AES-256.",
+        "The system shall generate the report within 30 seconds of the user request.",
+        "The system shall store all passwords as salted bcrypt hashes with a minimum cost factor of 12.",
+        "The system shall restrict access to authenticated and authorised users only.",
+        "The validation module shall reject any input that does not conform to the schema defined in Section 3.2.",
+        "The system shall lock the user account after 3 consecutive failed login attempts."
+      ],
+      "detect_hints": [
+        "shall not",
+        "is required that",
+        "shall be able to",
+        "it is expected",
+        "should not",
+        "must not",
+        "will not",
+        "cannot",
+        "is not allowed",
+        "is prohibited",
+        "it shall be"
+      ]
+    },
+    {
+      "id": "ISO_LANG_WHAT_NOT_HOW",
+      "section": "5.2.7",
+      "category": "language",
+      "mapped_rules": [],
+      "rule": "Requirements shall state what is needed for the system-of-interest and shall not include design decisions or implementation details for it.",
+      "guidance": "Naming specific technologies, design patterns, database schemas, or internal architectures in a requirement constrains the solution space. Ask: 'Does this describe a need, or a solution?' Move implementation decisions to the design documentation. Exceptions exist when a constraint genuinely originates from the stakeholder (e.g., mandated platform, regulatory requirement for a specific algorithm).",
+      "rewrite_tip": "Remove the implementation detail and restate as the capability or behaviour the system must provide, leaving the solution space open to designers.",
+      "bad_examples": [
+        "The system shall use a microservices architecture with Docker containers orchestrated by Kubernetes.",
+        "The system shall implement the observer pattern to notify users of status changes.",
+        "The system shall query the users table with a JOIN on the roles table to determine permissions.",
+        "The system shall use a RESTful API built with Express.js running on Node.js 18."
+      ],
+      "good_examples": [
+        "The system shall support independent deployment and scaling of each functional subsystem.",
+        "The system shall notify subscribed users of status changes within 5 seconds of the change occurring.",
+        "The system shall determine user permissions based on assigned roles at the time of each access request.",
+        "The system shall expose a programmatic interface that allows external systems to create, read, update, and delete resources."
+      ],
+      "detect_hints": [
+        "microservice",
+        "monolith",
+        "REST",
+        "GraphQL",
+        "SQL",
+        "NoSQL",
+        "Docker",
+        "Kubernetes",
+        "AWS",
+        "Azure",
+        "GCP",
+        "lambda",
+        "serverless",
+        "observer pattern",
+        "factory pattern",
+        "singleton",
+        "JOIN",
+        "SELECT",
+        "INSERT",
+        "framework",
+        "library"
+      ]
+    },
+    {
+      "id": "ISO_CONSTRUCTION_SUBJECT",
+      "section": "5.2.4",
+      "category": "construction",
+      "mapped_rules": [],
+      "rule": "A requirement shall state the subject of the requirement (e.g., the system, the software) explicitly.",
+      "guidance": "Every requirement needs an explicit subject \u2014 the entity that bears the obligation. A requirement without a subject is ambiguous (who or what must do this?) and untestable (which component do we verify?). Use the defined system name, subsystem name, or component name from the system architecture.",
+      "rewrite_tip": "Prepend the explicit subject (e.g., 'The system', 'The payment service') so the requirement clearly states which entity bears the obligation.",
+      "bad_examples": [
+        "Shall encrypt all data at rest.",
+        "Must process orders within 5 seconds.",
+        "Logs all user activity.",
+        "Needs to support 10,000 users."
+      ],
+      "good_examples": [
+        "The system shall encrypt all data at rest using AES-256.",
+        "The order processing subsystem shall process each order within 5 seconds of receipt.",
+        "The audit service shall log all user activity, including user ID, action, and timestamp.",
+        "The platform shall support a minimum of 10,000 concurrent users."
+      ],
+      "detect_hints": [
+        "^Shall",
+        "^Must",
+        "^Should",
+        "^Needs to",
+        "^Can"
+      ]
+    },
+    {
+      "id": "ISO_CONSTRUCTION_CONDITIONS",
+      "section": "5.2.4",
+      "category": "construction",
+      "mapped_rules": [],
+      "rule": "Conditions are measurable qualitative or quantitative attributes that are stipulated for a requirement, further qualifying what is needed and permitting verification.",
+      "guidance": "Conditions define the boundary within which the requirement applies and the criteria by which it is measured. Include: load conditions, data volumes, timing constraints, environmental factors, and measurable acceptance thresholds. Without conditions, a requirement cannot be verified.",
+      "rewrite_tip": "Add measurable conditions: load levels, data volumes, timing windows, environmental factors, and quantitative acceptance thresholds.",
+      "bad_examples": [
+        "The system shall respond quickly.",
+        "The system shall be available.",
+        "The system shall process transactions.",
+        "The system shall back up data."
+      ],
+      "good_examples": [
+        "The system shall respond to search queries within 500 milliseconds when the database contains up to 5 million records.",
+        "The system shall be available 99.9% of the time, measured monthly, excluding scheduled maintenance windows of no more than 4 hours per month.",
+        "The system shall process up to 500 payment transactions per second with a success rate of at least 99.5%.",
+        "The system shall perform an automated full backup every 24 hours between 01:00 and 03:00 UTC, completing within 2 hours."
+      ],
+      "detect_hints": []
+    },
+    {
+      "id": "ISO_CONSTRUCTION_CONSTRAINTS",
+      "section": "5.2.4",
+      "category": "construction",
+      "mapped_rules": [],
+      "rule": "Constraints restrict the design solution or implementation. They may apply across all requirements, relate to specific requirements, or stand alone.",
+      "guidance": "Make constraints specific: name the regulation with clauses, give exact dimensions, list supported platforms with version policies. Vague constraints ('comply with regulations') are unverifiable. Constraints often originate from interfaces, laws, physical environments, legacy systems, or organisational standards.",
+      "rewrite_tip": "Make the constraint specific: name the regulation with edition and clauses, give exact dimensions, or list supported platforms with version policies.",
+      "bad_examples": [
+        "The system shall comply with regulations.",
+        "The system shall fit in the available space.",
+        "The system shall work on supported browsers."
+      ],
+      "good_examples": [
+        "The system shall comply with GDPR (EU 2016/679), specifically Articles 5, 6, 13, 15, 17, and 25.",
+        "The controller hardware shall not exceed dimensions of 200 mm \u00d7 150 mm \u00d7 50 mm to fit within the enclosure defined in drawing DWG-2024-0042.",
+        "The web application shall function correctly on the two most recent stable versions of Chrome, Firefox, Safari, and Edge at the time of each release."
+      ],
+      "detect_hints": [
+        "comply with",
+        "in accordance with",
+        "conform to",
+        "compatible with",
+        "fit within",
+        "operate in"
+      ]
+    }
+  ]
+}

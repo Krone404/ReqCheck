@@ -1,19 +1,44 @@
-export async function analyseRequirement(text: string) {
-  const response = await fetch("http://localhost:8000/api/analyse", {
+import type { AnalysisResult } from "../types/analysis";
+
+const BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:8000" : "");
+
+export async function analyseRequirement(
+  text: string,
+  useRag: boolean,
+  priority: string,
+  reqType: string,
+): Promise<AnalysisResult> {
+  const response = await fetch(`${BASE}/api/analyse`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      text: text,
-      type: "functional",
-      priority: "must",
+      text,
+      use_rag:  useRag,
+      priority,
+      type:     reqType,
     }),
   });
 
-  if (!response.ok) {
-    throw new Error("Failed to analyse requirement");
+  let data: AnalysisResult | null = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
   }
 
-  return response.json();
+  if (!response.ok) {
+    const errData = data as unknown as { detail?: string; message?: string } | null;
+    const message =
+      errData?.detail ||
+      errData?.message ||
+      `Request failed with status ${response.status}`;
+    throw new Error(message);
+  }
+
+  if (!data) throw new Error("Empty response from server");
+
+  return data;
 }

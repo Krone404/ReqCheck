@@ -1,3 +1,6 @@
+export type Priority = "must" | "should" | "could" | "wont";
+export type ReqType  = "functional" | "non_functional" | "constraint";
+
 export interface Finding {
   rule_id: string;
   message: string;
@@ -8,4 +11,6 @@ export interface AnalysisResult {
   findings: Finding[];
   clarity_score: number;
   testability_score: number;
+  suggestions: string[];
+  rag_error?: string | null;
 }
