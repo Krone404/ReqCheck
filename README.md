@@ -157,37 +157,44 @@ ReqCheck
 ├── backend
 │   ├── app
 │   │   ├── api
-│   │   │   └── analysis.py          # POST /api/analyse endpoint
+│   │   │   ├── analysis.py
+│   │   │   └── __init__.py
 │   │   ├── models
-│   │   │   └── schemas.py           # RequirementInput, Finding, AnalysisResult
+│   │   │   ├── schemas.py
+│   │   │   └── __init__.py
 │   │   ├── preprocessing
-│   │   │   └── preprocessor.py      # Normalisation and tokenisation
+│   │   │   ├── preprocessor.py
+│   │   │   └── __init__.py
 │   │   ├── rag
 │   │   │   ├── data
-│   │   │   │   └── guidelines.json  # ISO 29148 knowledge base
-│   │   │   ├── generator.py         # Ollama subprocess wrapper
-│   │   │   ├── pipeline.py          # RAG prompt construction and orchestration
-│   │   │   └── query.py             # Knowledge base retrieval
+│   │   │   │   └── guidelines.json
+│   │   │   ├── generator.py
+│   │   │   ├── pipeline.py
+│   │   │   └── query.py
 │   │   ├── rules
 │   │   │   ├── dictionaries
 │   │   │   │   └── ambiguity_terms.json
-│   │   │   ├── ambiguity_rules.py   # AMB001–AMB004
+│   │   │   ├── ambiguity_rules.py
 │   │   │   ├── base_rule.py
-│   │   │   ├── completeness_rules.py # COMP001
-│   │   │   ├── moscow_rules.py      # MOSC001, MOSC002
-│   │   │   ├── singularity_rules.py # SING001
-│   │   │   ├── structure_rules.py   # STR001
-│   │   │   ├── testability_rules.py # TEST001
-│   │   │   └── type_rules.py        # TYPE001–TYPE003
+│   │   │   ├── completeness_rules.py
+│   │   │   ├── moscow_rules.py
+│   │   │   ├── singularity_rules.py
+│   │   │   ├── structure_rules.py
+│   │   │   ├── testability_rules.py
+│   │   │   ├── type_rules.py
+│   │   │   └── __init__.py
 │   │   ├── services
-│   │   │   └── analysis_engine.py   # Orchestrates rules, scoring, and RAG
-│   │   └── main.py                  # FastAPI app entry point
+│   │   │   ├── analysis_engine.py
+│   │   │   └── __init__.py
+│   │   └── main.py
 │   ├── tests
 │   │   ├── test_analysis_engine.py
 │   │   └── test_rules.py
 │   ├── pytest.ini
 │   └── requirements.txt
 ├── frontend
+│   ├── public
+│   │   └── vite.svg
 │   ├── src
 │   │   ├── api
 │   │   │   └── reqcheck.ts
@@ -203,9 +210,15 @@ ReqCheck
 │   │   ├── types
 │   │   │   └── analysis.ts
 │   │   ├── App.tsx
+│   │   ├── index.css
 │   │   └── main.tsx
+│   ├── eslint.config.js
 │   ├── index.html
+│   ├── package-lock.json
 │   ├── package.json
+│   ├── tsconfig.app.json
+│   ├── tsconfig.json
+│   ├── tsconfig.node.json
 │   ├── vercel.json
 │   └── vite.config.ts
 ├── .gitignore
@@ -219,7 +232,7 @@ ReqCheck
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/reqcheck.git
+git clone https://github.com/krone404/reqcheck.git
 cd reqcheck
 ```
 
@@ -406,24 +419,6 @@ Response:
 ```
 
 `rag_error` is `null` on success or when `use_rag` is `false`. When the AI pipeline fails (e.g. Ollama is not running), it contains a human-readable error string and the rest of the response is still returned normally.
-
----
-
-## Deployment
-
-The system is deployed using separate frontend and backend services.
-
-**Frontend** — Vercel (hosts the React interface)
-
-**Backend** — Railway (hosts the Python API and rule engine)
-
-When deploying, set the `ALLOWED_ORIGINS` environment variable on Railway to the Vercel deployment URL so CORS is permitted.
-
-```
-ALLOWED_ORIGINS=https://your-app.vercel.app
-```
-
-Note: The AI suggestions feature (Ollama) requires a local environment and is not available in the hosted deployment.
 
 ---
 
