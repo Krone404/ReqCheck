@@ -14,3 +14,12 @@ export interface AnalysisResult {
   suggestions: string[];
   rag_error?: string | null;
 }
+
+export interface HistoryEntry {
+  id: string;
+  text: string;
+  reqType: ReqType;
+  priority: Priority;
+  result: AnalysisResult;
+  timestamp: number;
+}
